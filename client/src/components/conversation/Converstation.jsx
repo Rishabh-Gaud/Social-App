@@ -1,12 +1,28 @@
-import React from 'react'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
 import './conversation.css'
 
-export default function Converstation() {
-    return (
+export default function Converstation({conversation, currentUser}) {
+    const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+   
+   const [user , setUser]=useState(null);
+   useEffect(()=>{
+       const friendId = conversation.members.find(m=>m!==currentUser._id);
+       const getUser = async()=>{
+           try {
+               const res = await axios.get("/users?userId="+friendId)
+                setUser(res.data)
+            } catch (error) {
+               console.log(error);
+           }
+       }
+       getUser();
+   },[currentUser,conversation])
+   return (
 <div className="conversation">
-    <img src="https://pbs.twimg.com/profile_images/1173687413341937664/VB2G1AxY_400x400.jpg"
+    <img src={user?.profilePicture?PF+user.profilePicture:PF+"person/noAvatar.png"}
     alt="" className="conversationImg" />
-    <span className="conversationName">Runo Misaki</span>
+    <span className="conversationName">{user?.username}</span>
 </div>
     )
 }
