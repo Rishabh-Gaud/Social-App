@@ -6,14 +6,22 @@ import Topbar from '../../components/topbar/Topbar'
 import { AuthContext } from '../../context/AuthContext'
 import './messenger.css'
 import axios from "axios";
+import {io} from "socket.io-client"
 
 const Messenger = () => {
+
   const {user} = useContext(AuthContext);
   const [conversation,setConversation]= useState([]);
   const [currentChat,setCurrentChat]= useState(null);
   const [messages,setMessages]= useState([]);
   const [newMessages,setNewMessages]= useState("");
   const scrollRef = useRef()
+
+  //for socket.io
+  const socket  = useRef(io("ws://localhost:8900"))
+ 
+  
+  
   useEffect(()=>{
     const getConversation = async()=>{
       try {
@@ -25,6 +33,9 @@ const Messenger = () => {
     }
     getConversation();
   },[user]);
+
+
+
 
   useEffect(()=>{
     const getMessages = async()=>{
@@ -45,19 +56,23 @@ const Messenger = () => {
       text : newMessages,
       conversationId:currentChat._id,
     };
-try {
-  const res =await axios.post("/message/",newermessage);
-  setMessages([...messages,res.data])
-  setNewMessages("");
-} catch (error) {
-  console.log(error);
-}
+    try {
+      const res =await axios.post("/message/",newermessage);
+      setMessages([...messages,res.data])
+      setNewMessages("");
+    } catch (error) {
+        console.log(error);
+      }
 
   }
 
   useEffect(()=>{
     scrollRef.current?.scrollIntoView({behavior:"smooth"})
   },[messages])
+
+
+
+
   return (
         <>
 

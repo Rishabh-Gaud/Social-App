@@ -36,7 +36,9 @@ export default function Topbar() {
             <span className="topbarIconBadge">1</span>
           </div>
           <div className="topbarIconItem">
-            <Chat />
+          <Link to = "/messenger">
+          <Chat />
+          </Link >
             <span className="topbarIconBadge">2</span>
           </div>
           <div className="topbarIconItem">
@@ -44,8 +46,8 @@ export default function Topbar() {
             <span className="topbarIconBadge">1</span>
           </div>
         </div>
-        <Link to={`/profile/${user.username}`}>
-            <img src={user.profilePicture
+        <Link to={`/profile/${user?.username}`}>
+            <img src={user?.profilePicture
             ?PF+user.profilePicture
             :PF+"person/noAvatar.png"}
             alt="" className="topbarImg"/>
