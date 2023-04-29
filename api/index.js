@@ -14,14 +14,15 @@ const router = express.Router();
 const path = require("path");
 
 dotenv.config();
-
-mongoose.connect(
-  process.env.MONGO_URL,
-  { useNewUrlParser: true, useUnifiedTopology: true },
-  () => {
-    console.log("Connected to MongoDB");
-  }
-);
+const uri = process.env.MONGO
+mongoose
+  .connect(
+    uri,
+    { useNewUrlParser: true, useUnifiedTopology: true },
+    () => {
+      console.log("Connected to MongoDB");
+    }
+  )
 app.use("/images", express.static(path.join(__dirname, "public/images")));
 
 //middleware
